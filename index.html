@@ -4,20 +4,30 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tugas 7.2</title>
+    <title>Tugas 7.1</title>
   </head>
   <style>
     body{
         background-color: rgb(9, 1, 101);
     }
-    table tr td, th{
+    table tr td{
         padding: 10px;
     }
     input{
         padding-left: 5px;
     }
-    input[type="checkbox"]{
+    input[type="radio"]{
         margin-right: 10px;
+        margin-left: -60px;
+        font: inherit;
+        color: currentColor;
+        width: 1.4em;
+        height: 1.4em;
+        border: 0.15em solid red;
+        border-radius: 50%;
+    }
+    input[type="number"]{
+        width: 50px;
     }
     input[type="button"],input[type="reset"]{
         margin: 0px 20px;
@@ -27,119 +37,97 @@
         border-radius: 5px;
     }
     table{
-        border: 2px solid red;
+        position: relative;
+        border: 3px solid blueviolet;
+    }
+    table tr td:nth-child(3){
+      text-align: center;
+      width: 150px;
+    }
+    span {
+      position: absolute;
+      margin-top: 5px;
     }
   </style>
   <body>
     <center>
-      <h1>PROGRAM PENJUALAN BARANG</h1>
-	<hr>
-	<table>
-    <tr>
-      <th>Nama Barang</th>
-      <th>Jumlah Beli</th>
-      <th>Harga</th>
-    </tr>
-    <tr>
-      <td><input type="checkbox" id="handphone" onchange="calculateTotal()"/>Handphone</td>
-      <td><input type="number" id="handphoneQuantity" onchange="calculateTotal()" min="0"/></td>
-      <td id="handphonePrice"></td>
-    </tr>
-    <tr>
-      <td><input type="checkbox" id="laptop" onchange="calculateTotal()"/>Laptop</td>
-      <td><input type="number" id="laptopQuantity" onchange="calculateTotal()" min="0"/></td>
-      <td id="laptopPrice"></td>
-    </tr>
-    <tr>
-      <td><input type="checkbox" id="komputer" onchange="calculateTotal()"/>Komputer</td>
-      <td><input type="number" id="komputerQuantity" onchange="calculateTotal()" min="0"/></td>
-      <td id="komputerPrice"></td>
-    </tr>
-  </table>
-  <br>
-  <p>Total Harga : <span id="totalPrice"></span></p>
-  <button onclick="reset()">Reset</button>
-  <button onclick="process()">Process</button>
-
+      <h3>
+        PROGRAM PENJUALAN BARANG <br />
+        (Input Type Radio)
+      </h2>
+      <form>
+        <table border="1">
+            <tr>
+                <td>Kota Tujuan</td>
+               <td>:</td>
+               <td>
+                <input type="radio" name="kota" value="Jakarta" onclick="updateHarga()"><span>Jakarta</span>  <br>
+                <input type="radio" name="kota" value="Semarang"  onclick="updateHarga()"> <span>Semarang</span><br>
+                <input type="radio" name="kota" value="Surabaya" onclick="updateHarga()"> <span>Surabaya</span><br>
+            </td>
+            </tr>
+            <tr>
+                <td>Jumlah</td>
+                <td>:</td>
+                <td>
+                    <input type="number" name="jumlah" id="jumlah">
+                </td>
+            </tr>
+            <tr>
+                <td>Harga Tiket</td>
+                <td>:</td>
+                <td name="harga" id="harga" name="harga"></td>
+            </tr>
+            <tr>
+                <td>Total Harga</td>
+                <td>:</td>
+                <td name="total" id="total" name="totalHarga"></td>
+            </tr>
+            <tr>
+                <td colspan="3" style="text-align: center;">
+                    <input type="button" value="Proses" onclick="hitungTotal()">
+                    <input type="reset" value="Reset">
+                </td>
+            </tr>
+        </table>
+      </form>
+    </center>
 
     <script>
-      const handphonePrice = 1200000;
-      const laptopPrice = 500000;
-      const komputerPrice = 3000000;
-
-      function formatRupiah(amount) {
+        function formatRupiah(amount) {
         return amount.toLocaleString("id-ID", {
           style: "currency",
           currency: "IDR",
           minimumFractionDigits: 0,
         });
-      }
-
-      function calculateTotal() {
-        let handphoneQuantity = document.getElementById("handphoneQuantity").value;
-        let laptopQuantity = document.getElementById("laptopQuantity").value;
-        let komputerQuantity = document.getElementById("komputerQuantity").value;
-
-        let totalPrice = 0;
-
-        if (document.getElementById("handphone").checked) {
-          let handphoneTotalPrice = handphoneQuantity * handphonePrice;
-          document.getElementById("handphonePrice").innerHTML = formatRupiah(handphoneTotalPrice);
-          totalPrice += handphoneTotalPrice;
-        } else {
-          document.getElementById("handphonePrice").innerHTML = "";
         }
-
-        if (document.getElementById("laptop").checked) {
-          let laptopTotalPrice = laptopQuantity * laptopPrice;
-          document.getElementById("laptopPrice").innerHTML = formatRupiah(laptopTotalPrice);
-          totalPrice += laptopTotalPrice;
-        } else {
-          document.getElementById("laptopPrice").innerHTML = "";
+        function updateHarga() {
+        var kota = document.querySelector('input[name="kota"]:checked').value;
+        var harga = 0;
+        switch(kota) {
+          case "Jakarta":
+            harga = 100000;
+            break;
+          case "Semarang":
+            harga = 150000;
+            break;
+          case "Surabaya":
+            harga = 200000;
+            break;
+          default:
+            harga = 0;
+            break;
         }
-
-        if (document.getElementById("komputer").checked) {
-          let komputerTotalPrice = komputerQuantity * komputerPrice;
-          document.getElementById("komputerPrice").innerHTML = formatRupiah(komputerTotalPrice);
-          totalPrice += komputerTotalPrice;
-        } else {
-          document.getElementById("komputerPrice").innerHTML = "";
-        }
-
-        document.getElementById("totalPrice").innerHTML = formatRupiah(totalPrice);
-      }
-
-      function reset() {
-        document.getElementById("handphoneQuantity").value = "";
-        document.getElementById("laptopQuantity").value = "";
-        document.getElementById("komputerQuantity").value = "";
-        document.getElementById("handphonePrice").innerHTML = "";
-        document.getElementById("laptopPrice").innerHTML = "";
-        document.getElementById("komputerPrice").innerHTML = "";
-        document.getElementById("totalPrice").innerHTML = "";
-        document.getElementById("handphone").checked = false;
-        document.getElementById("laptop").checked = false;
-        document.getElementById("komputer").checked = false;
-      }
-
-      function process() {
-        let handphoneQuantity = document.getElementById("handphoneQuantity").value;
-        let laptopQuantity = document.getElementById("laptopQuantity").value;
-        let komputerQuantity = document.getElementById("komputerQuantity").value;
-
-        let totalPrice = handphoneQuantity * handphonePrice +
-          laptopQuantity * laptopPrice +
-          komputerQuantity * komputerPrice;
-
-        document.getElementById("totalPrice").innerHTML = formatRupiah(totalPrice);
-      }
-
-      document.getElementById("handphone").onchange = calculateTotal;
-      document.getElementById("laptop").onchange = calculateTotal;
-      document.getElementById("komputer").onchange = calculateTotal;
-      document.getElementById("processBtn").onclick = process;
-      document.getElementById("resetBtn").onclick = reset;
-
+        document.getElementById("harga").innerHTML = formatRupiah(harga);
+		}
+		
+		function hitungTotal() {
+			var harga = document.getElementById("harga").value;
+			var jumlah = document.getElementById("jumlah").value;
+			var total = harga * jumlah;
+			document.getElementById("total").innerHTML = formatRupiah(total);
+		}
     </script>
+
   </body>
 </html>
